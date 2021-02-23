@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/main.css">
+  
+  <title>Frontend Mentor | Job Listings</title>
+</head>
+<body>
+  <header class="header-container py-4 relative h-36">
+    <img src="./images/bg-header-desktop.svg" class="absolute inset-0 w-full h-full object-cover">
+  </header>
+
+  <div class="jobs container w-screen grid grid-cols-1 justify-center items-center py-10 px-20 flex-row">
+  </div>
+  
+  
+  <div class="attribution flex justify-center items-center">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Siphiwo Julayi</a>.
+  </div>
+
+  <script>
+
+    (async function(){
+      const res = await fetch('./data.json')
+      const data = await res.json()
+
+      const ul = document.querySelector('.jobs')
+      let li = document.createElement('li')
+
+      data.forEach(job => {
+        
+        var newElement = `
+        <div class="card ${job.featured ? 'featured-items': null} mb-10 bg-white shadow-lg container py-4 px-4 flex justify-center items-center">
+        <div class="img-container flex-2 px-2 py-2">
+          <img src="${job.logo}">
+        </div>
+        <div class="company-name flex-1 px-4 py-2">
+          <div class="flex flex-row">
+            <p class="secondary-heading pr  mr-2 flex justify-center items-center">${job.company}</p>
+            ${job.new ? '<p class="tags new-tag rounded-xl px-2 p-1">new</p>': ''}
+            ${job.featured ? '<p class="tags rounded-xl bg-black px-2 p-1 ml-3 text-white">featured</p>': ''}
+          </div>
+          <p class="main-heading my-2">${job.position}</p>
+          <div class="flex flex-row">
+            <small class="text-gray-400">${job.postedAt}</small><small class="px-3">-</small>
+            <small class="text-gray-400">${job.contract}</small><small class="px-3">-</small>
+            <small class="text-gray-400">${job.location}</small>
+          </div>
+        </div>
+        <div class="tags flex flex-1 justify-center items-end">`;
+
+          [...job.languages, ...job.tools].forEach(skill => newElement += `<div class="tag rounded-md p-1 px-2 m-2">${skill}</div>`)
+
+          newElement += `</div></div>`
+
+        ul.innerHTML += newElement
+      });
+    })()
+  </script>
+</body>
+</html>
